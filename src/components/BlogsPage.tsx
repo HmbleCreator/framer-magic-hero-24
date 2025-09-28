@@ -6,6 +6,7 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
 import matter from 'gray-matter';
 import blogsMeta, { BlogMeta } from '@/lib/blogs';
+import { useFormSubmission } from '@/hooks/use-form-submission';
 
 // Try to load remark-gfm at runtime
 let runtimeRemarkGfm: any = null;
@@ -16,6 +17,66 @@ try {
   console.warn('remark-gfm not available, using basic markdown parsing');
   runtimeRemarkGfm = null;
 }
+
+// Blog Newsletter Form Component
+const BlogNewsletterForm = () => {
+  const { submitForm, isSubmitting, submitStatus } = useFormSubmission();
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email.trim() || !name.trim()) return;
+
+    const result = await submitForm({
+      name: name.trim(),
+      email: email.trim(),
+      formType: 'newsletter'
+    });
+
+    if (result.success) {
+      setEmail('');
+      setName('');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-4">
+      <input
+        type="text"
+        placeholder="Your name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+        className="w-full px-4 py-3 bg-black border border-purple-300/20 rounded-lg text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+      />
+      <div className="flex flex-col sm:flex-row gap-4">
+        <input
+          type="email"
+          placeholder="Enter your email address"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          className="flex-1 px-4 py-3 bg-black border border-purple-300/20 rounded-lg text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+        />
+        <button 
+          type="submit"
+          disabled={isSubmitting}
+          className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-6 py-3 rounded-lg font-medium transform hover:scale-105 transition-all whitespace-nowrap disabled:opacity-50"
+        >
+          {isSubmitting ? 'Subscribing...' : 'Subscribe'}
+        </button>
+      </div>
+      {submitStatus === 'success' && (
+        <p className="text-green-400 text-sm text-center">✅ Successfully subscribed to our newsletter!</p>
+      )}
+      {submitStatus === 'error' && (
+        <p className="text-red-400 text-sm text-center">❌ Something went wrong. Please try again.</p>
+      )}
+    </form>
+  );
+};
 
 // Helper functions - defined once at module level
 const stripMarkdown = (md: string): string =>
@@ -476,16 +537,7 @@ const BlogPage: React.FC = () => {
             <p className="text-gray-300 mb-8">
               Get the latest AI insights delivered straight to your inbox. No spam, just valuable content.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-              <input 
-                type="email" 
-                placeholder="Enter your email" 
-                className="flex-1 px-4 py-3 bg-black border border-purple-300/20 rounded-lg text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent" 
-              />
-              <button className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-6 py-3 rounded-lg font-medium transform hover:scale-105 transition-all whitespace-nowrap">
-                Subscribe
-              </button>
-            </div>
+            <BlogNewsletterForm />
           </div>
         </div>
       </div>
