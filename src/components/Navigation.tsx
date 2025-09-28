@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import orbitLogo from "@/assets/orbit-logo.png";
+import BookingModal from "./BookingModal";
 
 const Navigation = () => {
   const location = useLocation();
@@ -63,14 +64,16 @@ const Navigation = () => {
 
         {/* Desktop CTA Button */}
         <div className="hidden md:flex items-center h-full">
-          <Button variant="orbit" className="px-6 py-2 rounded-lg font-medium h-[40px] flex items-center overflow-hidden group relative" style={{height: '40px'}}>
-            <span className="block transition-transform duration-500 group-hover:-translate-y-full group-hover:opacity-0">
-              Book a call
-            </span>
-            <span className="block absolute left-0 right-0 top-full transition-transform duration-500 translate-y-0 group-hover:translate-y-[-150%] group-hover:opacity-100 opacity-0">
-              Book a call
-            </span>
-          </Button>
+          <BookingModal>
+            <Button variant="orbit" className="px-6 py-2 rounded-lg font-medium h-[40px] flex items-center overflow-hidden group relative" style={{height: '40px'}}>
+              <span className="block transition-transform duration-500 group-hover:-translate-y-full group-hover:opacity-0">
+                Book a call
+              </span>
+              <span className="block absolute left-0 right-0 top-full transition-transform duration-500 translate-y-0 group-hover:translate-y-[-150%] group-hover:opacity-100 opacity-0">
+                Book a call
+              </span>
+            </Button>
+          </BookingModal>
         </div>
 
         {/* Mobile Menu Button */}
@@ -118,12 +121,14 @@ const Navigation = () => {
             
             {/* Mobile CTA Button */}
             <div className="pt-4 border-t border-gray-800">
-              <Button 
-                variant="orbit" 
-                className="w-full px-6 py-3 rounded-lg font-medium h-[48px] text-base"
-              >
-                Book a call
-              </Button>
+              <BookingModal>
+                <Button
+                  variant="orbit"
+                  className="w-full px-6 py-3 rounded-lg font-medium h-[48px] text-base"
+                >
+                  Book a call
+                </Button>
+              </BookingModal>
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Footer from './Footer';
 import { useHeadingReveal } from '@/hooks/use-heading-reveal';
+import { useFormSubmission } from '@/hooks/use-form-submission';
 
 // Animated Background Orbs
 const AnimatedOrbs: React.FC = () => {
@@ -44,6 +45,7 @@ const AnimatedOrbs: React.FC = () => {
 
 // Redesigned Contact Form Component
 const ContactForm: React.FC = () => {
+  const { submitForm, isSubmitting, submitStatus } = useFormSubmission();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -51,8 +53,6 @@ const ContactForm: React.FC = () => {
     phone: '',
     message: ''
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -63,19 +63,16 @@ const ContactForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    try {
-      // Replace with your form submission logic
-      setTimeout(() => {
-        setSubmitStatus('success');
-        setFormData({ firstName: '', lastName: '', email: '', phone: '', message: '' });
-        setIsSubmitting(false);
-        setTimeout(() => setSubmitStatus('idle'), 4000);
-      }, 1200);
-    } catch {
-      setSubmitStatus('error');
-      setIsSubmitting(false);
-      setTimeout(() => setSubmitStatus('idle'), 4000);
+    
+    const result = await submitForm({
+      name: `${formData.firstName} ${formData.lastName}`.trim(),
+      email: formData.email,
+      message: formData.message,
+      formType: 'contact'
+    });
+
+    if (result.success) {
+      setFormData({ firstName: '', lastName: '', email: '', phone: '', message: '' });
     }
   };
 

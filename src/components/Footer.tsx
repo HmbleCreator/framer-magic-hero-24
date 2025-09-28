@@ -2,6 +2,72 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import orbitLogo from "@/assets/orbit-logo.png";
+import { useFormSubmission } from '@/hooks/use-form-submission';
+import { useState } from 'react';
+
+// Newsletter Form Component
+const NewsletterForm = () => {
+  const { submitForm, isSubmitting, submitStatus } = useFormSubmission();
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email.trim() || !name.trim()) return;
+
+    const result = await submitForm({
+      name: name.trim(),
+      email: email.trim(),
+      formType: 'newsletter'
+    });
+
+    if (result.success) {
+      setEmail('');
+      setName('');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="flex flex-col gap-2 max-w-xs">
+      <Input
+        type="text"
+        placeholder="Your name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+        className="bg-orbit-card border-orbit-purple/20 text-orbit-text-primary placeholder:text-orbit-text-muted flex-1 text-sm py-1.5 px-2"
+        style={{ fontSize: "0.85rem", height: "2rem" }}
+      />
+      <div className="flex gap-2">
+        <Input
+          type="email"
+          placeholder="name@email.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          className="bg-orbit-card border-orbit-purple/20 text-orbit-text-primary placeholder:text-orbit-text-muted flex-1 text-sm py-1.5 px-2"
+          style={{ fontSize: "0.85rem", height: "2rem" }}
+        />
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          variant="orbit"
+          className="px-3 py-1.5 text-sm"
+          style={{ fontSize: "0.85rem", height: "2rem" }}
+        >
+          {isSubmitting ? '...' : 'Subscribe'}
+        </Button>
+      </div>
+      {submitStatus === 'success' && (
+        <p className="text-green-400 text-xs">✅ Subscribed successfully!</p>
+      )}
+      {submitStatus === 'error' && (
+        <p className="text-red-400 text-xs">❌ Something went wrong</p>
+      )}
+    </form>
+  );
+};
 
 const Footer = () => {
   return (
@@ -45,21 +111,7 @@ const Footer = () => {
               <h4 className="text-orbit-text-primary font-medium text-base">
                 Join our newsletter
               </h4>
-              <div className="flex flex-col sm:flex-row gap-2 max-w-xs">
-                <Input
-                  type="email"
-                  placeholder="name@email.com"
-                  className="bg-orbit-card border-orbit-purple/20 text-orbit-text-primary placeholder:text-orbit-text-muted flex-1 text-sm py-1.5 px-2"
-                  style={{ fontSize: "0.85rem", height: "2rem" }}
-                />
-                <Button
-                  variant="orbit"
-                  className="px-3 py-1.5 text-sm"
-                  style={{ fontSize: "0.85rem", height: "2rem" }}
-                >
-                  Subscribe
-                </Button>
-              </div>
+              <NewsletterForm />
             </div>
           </div>
 

@@ -1,12 +1,8 @@
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
+import BookingModal from './BookingModal';
 
 const ContactSection = () => {
-  const handleBookCall = () => {
-    // Add your booking logic here
-    console.log('Book a call clicked');
-  };
-
   return (
     <section className="relative bg-black py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
       {/* Grid pattern background (subtle) */}
@@ -63,32 +59,33 @@ const ContactSection = () => {
             </p>
 
             {/* CTA Button */}
-            <button
-              onClick={handleBookCall}
-              className="group relative inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white rounded-md transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-transparent overflow-hidden"
-              style={{
-                background: 'linear-gradient(135deg, rgb(139, 92, 246) 0%, rgb(99, 102, 241) 50%, rgb(79, 70, 229) 100%)',
-                boxShadow: '0 6px 15px rgba(139, 92, 246, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2)',
-                height: '40px'
-              }}
-            >
-              <span className="block transition-transform duration-500 group-hover:-translate-y-full group-hover:opacity-0">
-                Book a free call
-                <ArrowUpRight 
-                  size={14} 
-                  className="inline ml-1 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" 
-                />
-              </span>
-              <span className="block absolute left-0 right-0 top-full transition-transform duration-500 translate-y-0 group-hover:translate-y-[-150%] group-hover:opacity-100 opacity-0">
-                Book a free call
-                <ArrowUpRight 
-                  size={14} 
-                  className="inline ml-1 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" 
-                />
-              </span>
-              {/* Button hover effect */}
-              <div className="absolute inset-0 rounded-md bg-gradient-to-r from-purple-400/20 to-blue-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </button>
+            <BookingModal>
+              <button
+                className="group relative inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white rounded-md transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-transparent overflow-hidden"
+                style={{
+                  background: 'linear-gradient(135deg, rgb(139, 92, 246) 0%, rgb(99, 102, 241) 50%, rgb(79, 70, 229) 100%)',
+                  boxShadow: '0 6px 15px rgba(139, 92, 246, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2)',
+                  height: '40px'
+                }}
+              >
+                <span className="block transition-transform duration-500 group-hover:-translate-y-full group-hover:opacity-0">
+                  Book a free call
+                  <ArrowUpRight 
+                    size={14} 
+                    className="inline ml-1 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" 
+                  />
+                </span>
+                <span className="block absolute left-0 right-0 top-full transition-transform duration-500 translate-y-0 group-hover:translate-y-[-150%] group-hover:opacity-100 opacity-0">
+                  Book a free call
+                  <ArrowUpRight 
+                    size={14} 
+                    className="inline ml-1 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" 
+                  />
+                </span>
+                {/* Button hover effect */}
+                <div className="absolute inset-0 rounded-md bg-gradient-to-r from-purple-400/20 to-blue-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </button>
+            </BookingModal>
           </div>
 
           {/* Decorative elements */}
