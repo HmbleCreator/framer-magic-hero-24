@@ -1,6 +1,5 @@
 {
-  "functions": {
-  },
+  
   "rewrites": [
     { 
       "source": "/api/(.*)", 
