@@ -361,6 +361,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   } catch (error) {
     console.error('Contact form error:', error);
     
+    // Check if environment variables are missing
+    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+      console.error('Missing email configuration environment variables');
+      return res.status(500).json({ 
+        success: false, 
+        message: 'Email service configuration error. Please contact support.' 
+      });
+    }
+    
     if (error instanceof z.ZodError) {
       return res.status(400).json({ 
         success: false, 
@@ -371,7 +380,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     return res.status(500).json({ 
       success: false, 
-      message: 'Something went wrong. Please try again later.' 
+      message: 'Something went wrong. Please try again later.',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 }
