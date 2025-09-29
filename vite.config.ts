@@ -7,12 +7,21 @@ import { componentTagger } from "lovable-tagger";
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
-    port: 8080,
+  port: 3000, // Use 3000 to avoid 8080 conflicts
     proxy: {
       '/api': {
         target: 'http://localhost:8080',
         changeOrigin: true,
         secure: false,
+        ws: false,
+        configure: (proxy, _options) => {
+          // Add CORS headers for local API
+          proxy.on('proxyRes', (proxyRes, req, res) => {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+            res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+          });
+        },
       },
     },
   },

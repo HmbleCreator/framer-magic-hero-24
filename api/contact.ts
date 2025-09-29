@@ -329,7 +329,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Create transporter
     console.log('🔧 Creating email transporter...');
-    const transporter = nodemailer.createTransporter({
+  const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: process.env.GMAIL_USER,
@@ -400,7 +400,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(500).json({ 
       success: false, 
       message: 'Something went wrong. Please try again later.',
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+      error: process.env.NODE_ENV === 'development' && typeof error === 'object' && error && 'message' in error ? (error as any).message : undefined
     });
   }
 }
