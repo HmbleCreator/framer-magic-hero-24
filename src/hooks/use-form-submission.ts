@@ -19,6 +19,8 @@ export const useFormSubmission = () => {
     setIsSubmitting(true);
     setSubmitStatus('idle');
 
+    console.log('🚀 Submitting form data:', { formType: data.formType, name: data.name, email: data.email });
+
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
@@ -28,7 +30,15 @@ export const useFormSubmission = () => {
         body: JSON.stringify(data),
       });
 
+      console.log('📡 Response status:', response.status);
+      
+      if (!response.ok) {
+        console.error('❌ Response not OK:', response.status, response.statusText);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const result = await response.json();
+      console.log('✅ Response data:', result);
 
       if (result.success) {
         setSubmitStatus('success');
@@ -47,8 +57,26 @@ export const useFormSubmission = () => {
         return { success: false, message: result.message };
       }
     } catch (error) {
+      console.error('❌ Form submission error:', error);
       setSubmitStatus('error');
-      const errorMessage = 'Network error. Please check your connection and try again.';
+      
+      let errorMessage = 'Network error. Please check your connection and try again.';
+      
+      // Handle different types of errors
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        errorMessage = 'Cannot connect to server. Please check your internet connection.';
+      } else if (error instanceof Error) {
+        if (error.message.includes('Failed to fetch')) {
+          errorMessage = 'Server is not responding. Please try again in a moment.';
+        } else if (error.message.includes('HTTP error')) {
+          errorMessage = `Server error (${error.message}). Please try again.`;
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      
+      console.error('📝 Error message for user:', errorMessage);
+      
       toast({
         title: "Error",
         description: errorMessage,

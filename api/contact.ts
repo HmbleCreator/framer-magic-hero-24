@@ -275,16 +275,22 @@ const checkRateLimit = (ip: string): boolean => {
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  console.log('🔥 API handler called, method:', req.method);
+  console.log('📦 Environment check - GMAIL_USER exists:', !!process.env.GMAIL_USER);
+  console.log('📦 Environment check - GMAIL_APP_PASSWORD exists:', !!process.env.GMAIL_APP_PASSWORD);
+  
   // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') {
+    console.log('✅ OPTIONS request handled');
     return res.status(200).end();
   }
 
   if (req.method !== 'POST') {
+    console.log('❌ Method not allowed:', req.method);
     return res.status(405).json({ success: false, message: 'Method not allowed' });
   }
 
@@ -293,10 +299,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const ip = Array.isArray(clientIp) ? clientIp[0] : clientIp;
   
   if (!checkRateLimit(ip.toString())) {
+    console.log('❌ Rate limit exceeded for IP:', ip);
     return res.status(429).json({ success: false, message: 'Too many requests. Please try again later.' });
   }
 
   try {
+    console.log('📨 Request body received:', { formType: req.body?.formType, hasName: !!req.body?.name, hasEmail: !!req.body?.email });
+    
     const { formType } = req.body;
 
     // Validate based on form type
@@ -312,10 +321,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         validatedData = bookingSchema.parse(req.body);
         break;
       default:
+        console.log('❌ Invalid form type:', formType);
         return res.status(400).json({ success: false, message: 'Invalid form type' });
     }
 
+    console.log('✅ Data validation successful for form type:', formType);
+
     // Create transporter
+    console.log('🔧 Creating email transporter...');
     const transporter = nodemailer.createTransporter({
       service: 'gmail',
       auth: {
@@ -347,11 +360,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       html: getAutoReplyTemplate(formType, validatedData),
     };
 
+    console.log('📧 Attempting to send emails...');
+    
     // Send both emails
     await Promise.all([
       transporter.sendMail(notificationEmail),
       transporter.sendMail(autoReplyEmail)
     ]);
+
+    console.log('✅ Emails sent successfully!');
 
     return res.status(200).json({ 
       success: true, 
@@ -359,11 +376,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
 
   } catch (error) {
-    console.error('Contact form error:', error);
+    console.error('❌ Contact form error:', error);
     
     // Check if environment variables are missing
     if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
-      console.error('Missing email configuration environment variables');
+      console.error('❌ Missing email configuration environment variables');
       return res.status(500).json({ 
         success: false, 
         message: 'Email service configuration error. Please contact support.' 
@@ -371,6 +388,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
     
     if (error instanceof z.ZodError) {
+      console.error('❌ Validation error:', error.errors);
       return res.status(400).json({ 
         success: false, 
         message: 'Please check your form data', 
@@ -378,6 +396,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       });
     }
 
+    console.error('❌ Unexpected error:', error);
     return res.status(500).json({ 
       success: false, 
       message: 'Something went wrong. Please try again later.',
