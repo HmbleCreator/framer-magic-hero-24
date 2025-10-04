@@ -201,7 +201,7 @@ const HeroSection = () => {
             </Button>
           </Link>
 
-          <a href="#services">
+          <a href="/services">
             <Button
               variant="outline"
               size="lg"

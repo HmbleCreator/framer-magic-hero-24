@@ -1,12 +1,37 @@
 import { Badge } from "@/components/ui/badge";
-import { Camera, Hexagon, Sparkles, Shield } from "lucide-react";
 
 const TrustSection = () => {
-  const companyLogos = [
-    { icon: Camera, name: "Logoipsum" },
-    { icon: Hexagon, name: "Logoipsum" },
-    { icon: Sparkles, name: "Logoipsum" },
-    { icon: Shield, name: "Logoipsum" },
+  const techLogos = [
+    { name: "Vercel", icon: "vercel", useSimpleIcons: true },
+    { name: "Hugging Face", icon: "huggingface", useSimpleIcons: true },
+    { name: "n8n", icon: "n8n", useSimpleIcons: true },
+    { name: "Figma", icon: "figma", useSimpleIcons: true },
+    { name: "Framer", icon: "framer", useSimpleIcons: true },
+    { name: "AWS", icon: "https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg", useSimpleIcons: false },
+    { name: "Keras", icon: "keras", useSimpleIcons: true },
+    { name: "TensorFlow", icon: "tensorflow", useSimpleIcons: true },
+    { name: "PyTorch", icon: "pytorch", useSimpleIcons: true },
+    { name: "React", icon: "react", useSimpleIcons: true },
+    { name: "Terraform", icon: "terraform", useSimpleIcons: true },
+    { name: "Ansible", icon: "ansible", useSimpleIcons: true },
+    { name: "Docker", icon: "docker", useSimpleIcons: true },
+    { name: "Jenkins", icon: "jenkins", useSimpleIcons: true },
+    { name: "JavaScript", icon: "javascript", useSimpleIcons: true },
+    { name: "Kubernetes", icon: "kubernetes", useSimpleIcons: true },
+    { name: "Python", icon: "python", useSimpleIcons: true },
+    { name: "scikit-learn", icon: "scikitlearn", useSimpleIcons: true },
+    { name: "OpenCV", icon: "opencv", useSimpleIcons: true },
+    { name: "Grafana", icon: "grafana", useSimpleIcons: true },
+    { name: "PostgreSQL", icon: "postgresql", useSimpleIcons: true },
+    { name: "Django", icon: "django", useSimpleIcons: true },
+    { name: "Flask", icon: "flask", useSimpleIcons: true },
+    { name: "GCP", icon: "googlecloud", useSimpleIcons: true },
+    { name: "Azure", icon: "https://upload.wikimedia.org/wikipedia/commons/f/fa/Microsoft_Azure.svg", useSimpleIcons: false },
+    { name: "PHP", icon: "php", useSimpleIcons: true },
+    { name: "Git", icon: "git", useSimpleIcons: true },
+    { name: "GitHub", icon: "github", useSimpleIcons: true },
+    { name: "GitLab", icon: "gitlab", useSimpleIcons: true },
+    { name: "Prometheus", icon: "prometheus", useSimpleIcons: true },
   ];
 
   return (
@@ -25,56 +50,78 @@ const TrustSection = () => {
 
       <div className="relative z-10 max-w-6xl mx-auto text-center">
         {/* Trust headline */}
-        <h2 className="text-orbit-text-primary text-lg sm:text-xl md:text-2xl font-medium mb-8 sm:mb-12 lg:mb-16 px-4">
-          Over 50+ business trust us
+        <h2 className="text-white text-lg sm:text-xl md:text-2xl font-bold-medium mb-8 sm:mb-12 lg:mb-16 px-4">
+          Powered by industry-leading technologies
         </h2>
 
-        {/* Company logos carousel */}
-        <div className="mb-16 sm:mb-24 lg:mb-32 overflow-hidden">
-          <div className="flex animate-scroll-left">
-            {/* First set of logos */}
-            {companyLogos.map((company, index) => (
-              <div key={index} className="flex items-center justify-center space-x-2 sm:space-x-3 opacity-60 hover:opacity-100 transition-opacity duration-300 min-w-[150px] sm:min-w-[200px] mx-4 sm:mx-6 lg:mx-8">
-                <company.icon className="w-6 h-6 sm:w-8 sm:h-8 text-orbit-text-muted" />
-                <span className="text-orbit-text-muted font-medium text-sm sm:text-base lg:text-lg whitespace-nowrap">
-                  {company.name}
-                </span>
-              </div>
-            ))}
-            {/* Duplicate set for seamless loop */}
-            {companyLogos.map((company, index) => (
-              <div key={`duplicate-${index}`} className="flex items-center justify-center space-x-2 sm:space-x-3 opacity-60 hover:opacity-100 transition-opacity duration-300 min-w-[150px] sm:min-w-[200px] mx-4 sm:mx-6 lg:mx-8">
-                <company.icon className="w-6 h-6 sm:w-8 sm:h-8 text-orbit-text-muted" />
-                <span className="text-orbit-text-muted font-medium text-sm sm:text-base lg:text-lg whitespace-nowrap">
-                  {company.name}
-                </span>
-              </div>
-            ))}
+        {/* Tech logos carousel */}
+        <div className="mb-16 sm:mb-24 lg:mb-32">
+          <div className="carousel-container">
+            <div className="flex animate-scroll gap-8 sm:gap-12 lg:gap-16">
+              {/* First set of logos */}
+              {techLogos.map((tech, index) => (
+                <div 
+                  key={`set1-${index}`} 
+                  className="flex items-center justify-center space-x-2 sm:space-x-3 opacity-60 hover:opacity-100 transition-opacity duration-300 flex-shrink-0 min-w-fit"
+                >
+                  <img 
+                    src={tech.useSimpleIcons ? `https://cdn.simpleicons.org/${tech.icon}/white` : tech.icon}
+                    alt={tech.name}
+                    className="w-6 h-6 sm:w-8 sm:h-8"
+                    style={!tech.useSimpleIcons ? { filter: 'brightness(0) invert(1)' } : {}}
+                  />
+                  <span className="text-gray-400 font-medium text-sm sm:text-base lg:text-lg whitespace-nowrap">
+                    {tech.name}
+                  </span>
+                </div>
+              ))}
+              {/* Duplicate set for seamless loop */}
+              {techLogos.map((tech, index) => (
+                <div 
+                  key={`set2-${index}`} 
+                  className="flex items-center justify-center space-x-2 sm:space-x-3 opacity-60 hover:opacity-100 transition-opacity duration-300 flex-shrink-0 min-w-fit"
+                >
+                  <img 
+                    src={tech.useSimpleIcons ? `https://cdn.simpleicons.org/${tech.icon}/white` : tech.icon}
+                    alt={tech.name}
+                    className="w-6 h-6 sm:w-8 sm:h-8"
+                    style={!tech.useSimpleIcons ? { filter: 'brightness(0) invert(1)' } : {}}
+                  />
+                  <span className="text-gray-400 font-medium text-sm sm:text-base lg:text-lg whitespace-nowrap">
+                    {tech.name}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-
-        {/* Services badge */}
-        <div className="mb-6 sm:mb-8 px-4">
-          <Badge 
-            variant="outline" 
-            className="bg-orbit-dark-lighter/50 border-orbit-text-muted/20 text-orbit-text-primary px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-medium backdrop-blur-sm"
-          >
-            Our Services
-          </Badge>
-        </div>
-
-        {/* Main headline */}
-        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold text-orbit-text-primary mb-6 sm:mb-8 leading-tight max-w-5xl mx-auto px-4">
-          AI Solutions That Take Your{" "}
-          <br className="hidden md:block" />
-          Business to the Next Level
-        </h2>
-
-        {/* Subtitle */}
-        <p className="text-base sm:text-lg md:text-xl text-orbit-text-muted max-w-3xl mx-auto leading-relaxed px-4">
-          We design, develop, and implement automation tools that help you work smarter, not harder
-        </p>
       </div>
+
+      <style>{`
+        .carousel-container {
+          overflow: hidden;
+          width: 100%;
+        }
+        
+        @keyframes scroll {
+          from {
+            transform: translateX(0);
+          }
+          to {
+            transform: translateX(calc(-100% / 2));
+          }
+        }
+        
+        .animate-scroll {
+          display: flex;
+          width: max-content;
+          animation: scroll 80s linear infinite;
+        }
+        
+        .animate-scroll:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
     </section>
   );
 };
