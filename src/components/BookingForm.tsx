@@ -21,6 +21,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onClose }) => {
     email: '', 
     phone: '',
     time: '',
+    timezone: '',
     message: ''
   });
 
@@ -29,6 +30,24 @@ const BookingForm: React.FC<BookingFormProps> = ({ onClose }) => {
     '9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM',
     '12:00 PM', '12:30 PM', '1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM',
     '3:00 PM', '3:30 PM', '4:00 PM', '4:30 PM'
+  ];
+
+  // Common timezones
+  const timezones = [
+    'America/New_York (EST/EDT)',
+    'America/Chicago (CST/CDT)',
+    'America/Denver (MST/MDT)',
+    'America/Los_Angeles (PST/PDT)',
+    'America/Phoenix (MST)',
+    'America/Anchorage (AKST/AKDT)',
+    'Pacific/Honolulu (HST)',
+    'Europe/London (GMT/BST)',
+    'Europe/Paris (CET/CEST)',
+    'Asia/Dubai (GST)',
+    'Asia/Kolkata (IST)',
+    'Asia/Singapore (SGT)',
+    'Asia/Tokyo (JST)',
+    'Australia/Sydney (AEDT/AEST)'
   ];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -52,7 +71,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onClose }) => {
     });
 
     if (result.success) {
-      setFormData({ name: '', email: '', phone: '', time: '', message: '' });
+      setFormData({ name: '', email: '', phone: '', time: '', timezone: '', message: '' });
       setDate(undefined);
       if (onClose) {
         setTimeout(onClose, 2000);
@@ -142,10 +161,10 @@ const BookingForm: React.FC<BookingFormProps> = ({ onClose }) => {
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {date ? format(date, "PPP") : <span>Pick a date</span>}
+                    {date ? format(date, "MMM d, yyyy") : <span>Pick a date</span>}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 bg-orbit-card border-orbit-purple/20" align="start">
+                <PopoverContent className="w-auto p-0 bg-black border-orbit-purple/20" align="start">
                   <Calendar
                     mode="single"
                     selected={date}
@@ -153,6 +172,9 @@ const BookingForm: React.FC<BookingFormProps> = ({ onClose }) => {
                     disabled={isDateDisabled}
                     initialFocus
                     className="pointer-events-auto"
+                    formatters={{
+                      formatCaption: (date) => format(date, "MMM yyyy")
+                    }}
                   />
                 </PopoverContent>
               </Popover>
@@ -175,6 +197,25 @@ const BookingForm: React.FC<BookingFormProps> = ({ onClose }) => {
                 ))}
               </select>
             </div>
+          </div>
+
+          <div>
+            <label htmlFor="timezone" className="block text-sm font-medium text-orbit-text-primary mb-1">
+              Timezone *
+            </label>
+            <select
+              id="timezone"
+              name="timezone"
+              required
+              value={formData.timezone}
+              onChange={handleChange}
+              className="w-full px-3 py-2 bg-orbit-dark border border-orbit-purple/20 rounded-md text-orbit-text-primary focus:outline-none focus:ring-2 focus:ring-orbit-purple"
+            >
+              <option value="">Select timezone</option>
+              {timezones.map((tz) => (
+                <option key={tz} value={tz}>{tz}</option>
+              ))}
+            </select>
           </div>
 
           <div>
