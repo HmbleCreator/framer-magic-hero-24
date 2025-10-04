@@ -36,7 +36,7 @@ const NewsletterForm = () => {
         value={name}
         onChange={(e) => setName(e.target.value)}
         required
-        className="bg-orbit-card border-orbit-purple/20 text-white placeholder:text-orbit-text-muted w-full text-sm py-1.5 px-3"
+          className="bg-orbit-card border-orbit-purple/20 text-black placeholder:text-gray-400 w-full text-sm py-1.5 px-3"
         style={{ fontSize: "0.85rem", height: "2.25rem" }}
       />
       <div className="flex gap-2 w-full">
@@ -46,7 +46,7 @@ const NewsletterForm = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="bg-orbit-card border-orbit-purple/20 text-white placeholder:text-orbit-text-muted flex-1 text-sm py-1.5 px-3"
+            className="bg-orbit-card border-orbit-purple/20 text-black placeholder:text-gray-400 flex-1 text-sm py-1.5 px-3"
           style={{ fontSize: "0.85rem", height: "2.25rem" }}
         />
         <Button

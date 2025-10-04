@@ -49,7 +49,7 @@ const BlogNewsletterForm = () => {
         value={name}
         onChange={(e) => setName(e.target.value)}
         required
-        className="w-full px-4 py-3 bg-black border border-purple-300/20 rounded-lg text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+        className="w-full px-4 py-3 bg-black border border-purple-300/20 rounded-lg text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
       />
       <div className="flex flex-col sm:flex-row gap-4">
         <input
@@ -58,7 +58,7 @@ const BlogNewsletterForm = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="flex-1 px-4 py-3 bg-black border border-purple-300/20 rounded-lg text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+          className="flex-1 px-4 py-3 bg-black border border-purple-300/20 rounded-lg text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
         />
         <button 
           type="submit"
