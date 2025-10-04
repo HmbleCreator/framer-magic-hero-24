@@ -104,30 +104,49 @@ const TeamMember = ({ name, role, description, image, Github }) => (
   </div>
 );
 
-// Team Carousel
+// Team Carousel with Smooth CSS Animation
 const TeamCarousel = () => {
   const members = [
     { name: "Amit Kumar", role: "AI/ML Specialist", description: "Designs scalable ML models.", image: "https://avatars.githubusercontent.com/u/140157584?v=4", Github: "https://github.com/HmbleCreator" },
     { name: "Manish Kumar", role: "Lead Web Developer", description: "Builds robust web platforms.", image: "https://avatars.githubusercontent.com/u/198463638?v=4", Github: "https://github.com/manishtarjan2" },
     { name: "Rakshit Malik", role: "Lead DevOps Engineer", description: "Ensures CI/CD & uptime.", image: "https://avatars.githubusercontent.com/u/111422125?v=4", Github: "https://github.com/rakshitmalik136" },
     { name: "Sachin Singh", role: "Product Manager & GenAI Specialist", description: "Bridges client goals with GenAI.", image: "/images/team/ava-patel.png", Github: "https://github.com/sachinsingh" },
-    { name: "Rakshit Malik", role: "Lead DevOps Engineer", description: "Ensures CI/CD & uptime.", image: "/images/team/rakshit.jpg", Github: "https://github.com/rakshitmalik" },
-    { name: "Sachin Singh", role: "Product Manager & GenAI Specialist", description: "Bridges client goals with GenAI.", image: "/images/team/ava-patel.png", Github: "https://github.com/sachinsingh" },
   ];
 
   return (
     <div className="overflow-hidden relative">
-      <motion.div
-        className="flex gap-6"
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{ repeat: Infinity, ease: "linear", duration: 20 }}
-      >
+      <style>{`
+        @keyframes smoothScroll {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+        
+        .animate-smooth-scroll {
+          animation: smoothScroll 30s linear infinite;
+        }
+        
+        .animate-smooth-scroll:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
+      
+      {/* Left Fade Gradient */}
+      <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-orbit-dark to-transparent z-10 pointer-events-none" />
+      
+      {/* Right Fade Gradient */}
+      <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-orbit-dark to-transparent z-10 pointer-events-none" />
+      
+      <div className="flex gap-6 animate-smooth-scroll">
         {[...members, ...members].map((m, i) => (
-          <div key={i} className="min-w-[250px] max-w-[280px]">
+          <div key={i} className="min-w-[250px] max-w-[280px] flex-shrink-0">
             <TeamMember {...m} />
           </div>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 };
@@ -181,7 +200,7 @@ const AboutPage = () => {
         </div>
 
         {/* Our Story */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20 px-6">
           <div>
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Our Story</h2>
             <div className="space-y-4 text-orbit-text-muted leading-relaxed">

@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Star } from 'lucide-react';
 
 const TestimonialsSection = () => {
-  const [offset, setOffset] = useState(0);
-
   const testimonials = [
     {
       quote: "AI automation transformed our operations by eliminating repetitive tasks and improving efficiency.",
@@ -43,34 +41,6 @@ const TestimonialsSection = () => {
     }
   ];
 
-  // Create rows of testimonials for grid layout
-  const createRows = (items: typeof testimonials, itemsPerRow: number) => {
-    const rows = [];
-    for (let i = 0; i < items.length; i += itemsPerRow) {
-      rows.push(items.slice(i, i + itemsPerRow));
-    }
-    return rows;
-  };
-
-  // Duplicate for infinite scroll
-  const extendedTestimonials = [...testimonials, ...testimonials, ...testimonials];
-  const rows = createRows(extendedTestimonials, 4);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setOffset((prev) => {
-        const rowHeight = 240; // Height of each row including gap
-        const totalRows = Math.ceil(testimonials.length / 4);
-        const totalHeight = totalRows * rowHeight;
-        const newOffset = prev + 1.5;
-        
-        return newOffset >= totalHeight ? 0 : newOffset;
-      });
-    }, 20);
-
-    return () => clearInterval(interval);
-  }, [testimonials.length]);
-
   const StarRating = () => (
     <div className="flex gap-1 mb-2">
       {[...Array(5)].map((_, i) => (
@@ -79,11 +49,63 @@ const TestimonialsSection = () => {
     </div>
   );
 
+  const TestimonialCard = ({ testimonial, index }) => (
+    <div
+      className="flex-shrink-0 w-80 mx-3"
+      style={{
+        transform: index % 2 === 0 ? 'rotate(-2deg)' : 'rotate(2deg)',
+      }}
+    >
+      <div className="bg-gradient-to-br from-purple-900/20 via-gray-900 to-black border border-purple-500/30 rounded-lg p-5 hover:border-purple-500 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 shadow-lg h-full">
+        <StarRating />
+        
+        <blockquote className="text-gray-300 mb-4 leading-relaxed text-sm">
+          "{testimonial.quote}"
+        </blockquote>
+        
+        <div className="flex items-center gap-3">
+          <img
+            src={testimonial.avatar}
+            alt={testimonial.author}
+            className="w-10 h-10 rounded-full object-cover ring-2 ring-purple-500/50"
+          />
+          <div>
+            <div className="font-semibold text-white text-sm">
+              {testimonial.author}
+            </div>
+            <div className="text-purple-300/70 text-xs">
+              {testimonial.position}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <section className="bg-black text-white py-20 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6">
+      <style>{`
+        @keyframes scroll {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+        
+        .animate-scroll {
+          animation: scroll 40s linear infinite;
+        }
+        
+        .animate-scroll:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
+      
+      <div className="max-w-7xl mx-auto px-6 mb-16">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
             Why Businesses Love<br />
             Our AI Solutions
@@ -92,61 +114,28 @@ const TestimonialsSection = () => {
             Real businesses, real results with AI automation.
           </p>
         </div>
+      </div>
 
-        {/* Scrolling Container - Fixed Height with Gradient Masks */}
-        <div className="relative max-w-7xl mx-auto overflow-hidden" style={{ height: '500px' }}>
-          {/* Top Fade Gradient */}
-          <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black to-transparent z-10 pointer-events-none" />
-          
-          {/* Bottom Fade Gradient */}
-          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent z-10 pointer-events-none" />
-          
-          {/* Scrolling Testimonials */}
-          <div
-            className="space-y-6"
-            style={{
-              transform: `translateY(-${offset}px)`,
-              transition: 'transform 0.02s linear'
-            }}
-          >
-            {rows.map((row, rowIndex) => (
-              <div key={rowIndex} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 px-4">
-                {row.map((testimonial, colIndex) => (
-                  <div
-                    key={`${rowIndex}-${colIndex}`}
-                    style={{
-                      transform: (rowIndex + colIndex) % 2 === 0 ? 'rotate(-2deg)' : 'rotate(2deg)',
-                      transformOrigin: 'center'
-                    }}
-                  >
-                    <div className="bg-gradient-to-br from-purple-900/20 via-gray-900 to-black border border-purple-500/30 rounded-lg p-4 hover:border-purple-500 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 shadow-lg h-full">
-                      <StarRating />
-                      
-                      <blockquote className="text-gray-300 mb-4 leading-relaxed text-sm">
-                        "{testimonial.quote}"
-                      </blockquote>
-                      
-                      <div className="flex items-center gap-3">
-                        <img
-                          src={testimonial.avatar}
-                          alt={testimonial.author}
-                          className="w-8 h-8 rounded-full object-cover ring-2 ring-purple-500/50"
-                        />
-                        <div>
-                          <div className="font-semibold text-white text-sm">
-                            {testimonial.author}
-                          </div>
-                          <div className="text-purple-300/70 text-xs">
-                            {testimonial.position}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
+      {/* Scrolling Container */}
+      <div className="relative">
+        {/* Left Fade Gradient */}
+        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
+        
+        {/* Right Fade Gradient */}
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
+        
+        {/* First Row - Left to Right */}
+        <div className="flex mb-6 animate-scroll">
+          {[...testimonials, ...testimonials].map((testimonial, index) => (
+            <TestimonialCard key={`row1-${index}`} testimonial={testimonial} index={index} />
+          ))}
+        </div>
+        
+        {/* Second Row - Right to Left */}
+        <div className="flex animate-scroll" style={{ animationDirection: 'reverse' }}>
+          {[...testimonials, ...testimonials].map((testimonial, index) => (
+            <TestimonialCard key={`row2-${index}`} testimonial={testimonial} index={index + 1} />
+          ))}
         </div>
       </div>
     </section>
