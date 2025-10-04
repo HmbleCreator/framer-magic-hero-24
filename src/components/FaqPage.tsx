@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 
-const FAQSection = () => {
+const FaqPage = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const faqs = [
@@ -88,4 +88,4 @@ const FAQSection = () => {
   );
 };
 
-export default FAQSection;
+export default FaqPage;

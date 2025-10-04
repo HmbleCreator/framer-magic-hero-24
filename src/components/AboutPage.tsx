@@ -76,7 +76,7 @@ const Statistics = () => {
 };
 
 // TeamMember Card
-const TeamMember = ({ name, role, description, image, linkedin }) => (
+const TeamMember = ({ name, role, description, image, Github }) => (
   <div className="bg-orbit-card border border-orbit-purple/20 rounded-2xl overflow-hidden shadow-lg group hover:shadow-xl transition-shadow duration-300">
     <div className="relative w-full aspect-[4/5] overflow-hidden">
       <img
@@ -89,11 +89,12 @@ const TeamMember = ({ name, role, description, image, linkedin }) => (
     <div className="p-4">
       <div className="flex items-center justify-between mb-1">
         <h3 className="text-lg font-semibold group-hover:text-orbit-purple transition-colors duration-300">{name}</h3>
-        {linkedin && (
-          <a href={linkedin} target="_blank" rel="noopener noreferrer" className="text-orbit-text-muted hover:text-orbit-purple">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" className="w-5 h-5">
-              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.761 0 5-2.239 5-5v-14c0-2.761-2.239-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.268c-.966 0-1.75-.804-1.75-1.732s.784-1.732 1.75-1.732 1.75.804 1.75 1.732-.784 1.732-1.75 1.732zm13.5 11.268h-3v-5.604c0-1.337-.025-3.063-1.867-3.063-1.868 0-2.155 1.459-2.155 2.963v5.704h-3v-10h2.881v1.367h.041c.401-.757 1.379-1.557 2.837-1.557 3.037 0 3.263 2.001 3.263 4.604v5.586z"/>
-            </svg>
+        {Github && (
+          <a href={Github} target="_blank" rel="noopener noreferrer" className="text-orbit-text-muted hover:text-orbit-purple">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+  <path d="M12 0.297C5.373 0.297 0 5.67 0 12.297c0 5.289 3.438 9.773 8.205 11.363.6.111.82-.261.82-.577 0-.285-.011-1.04-.017-2.042-3.338.726-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.085 1.84 1.237 1.84 1.237 1.07 1.834 2.809 1.304 3.495.997.108-.775.418-1.305.762-1.605-2.665-.304-5.467-1.332-5.467-5.931 0-1.31.469-2.381 1.236-3.221-.124-.303-.536-1.524.117-3.176 0 0 1.008-.322 3.301 1.23a11.52 11.52 0 013.003-.404c1.018.005 2.043.138 3.003.404 2.291-1.552 3.297-1.23 3.297-1.23.655 1.652.243 2.873.119 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.625-5.479 5.921.43.371.823 1.102.823 2.222 0 1.604-.015 2.896-.015 3.289 0 .319.216.694.825.576C20.565 22.067 24 17.584 24 12.297 24 5.67 18.627 0.297 12 0.297z"/>
+</svg>
+
           </a>
         )}
       </div>
@@ -106,12 +107,12 @@ const TeamMember = ({ name, role, description, image, linkedin }) => (
 // Team Carousel
 const TeamCarousel = () => {
   const members = [
-    { name: "Amit Kumar", role: "AI/ML Specialist", description: "Designs scalable ML models.", image: "https://avatars.githubusercontent.com/u/140157584?v=4", linkedin: "https://github.com/HmbleCreator" },
-    { name: "Manish Kumar", role: "Lead Web Developer", description: "Builds robust web platforms.", image: "https://avatars.githubusercontent.com/u/198463638?v=4", linkedin: "https://github.com/manishtarjan2" },
-    { name: "Rakshit Malik", role: "Lead DevOps Engineer", description: "Ensures CI/CD & uptime.", image: "/images/team/rakshit.jpg", linkedin: "https://www.linkedin.com/in/rakshit-malik-2132a5288/" },
-    { name: "Sachin Singh", role: "Product Manager & GenAI Specialist", description: "Bridges client goals with GenAI.", image: "/images/team/ava-patel.png", linkedin: "https://linkedin.com/in/ava" },
-    { name: "Rakshit Malik", role: "Lead DevOps Engineer", description: "Ensures CI/CD & uptime.", image: "/images/team/rakshit.jpg", linkedin: "https://www.linkedin.com/in/rakshit-malik-2132a5288/" },
-    { name: "Sachin Singh", role: "Product Manager & GenAI Specialist", description: "Bridges client goals with GenAI.", image: "/images/team/ava-patel.png", linkedin: "https://linkedin.com/in/ava" },
+    { name: "Amit Kumar", role: "AI/ML Specialist", description: "Designs scalable ML models.", image: "https://avatars.githubusercontent.com/u/140157584?v=4", Github: "https://github.com/HmbleCreator" },
+    { name: "Manish Kumar", role: "Lead Web Developer", description: "Builds robust web platforms.", image: "https://avatars.githubusercontent.com/u/198463638?v=4", Github: "https://github.com/manishtarjan2" },
+    { name: "Rakshit Malik", role: "Lead DevOps Engineer", description: "Ensures CI/CD & uptime.", image: "https://avatars.githubusercontent.com/u/111422125?v=4", Github: "https://github.com/rakshitmalik136" },
+    { name: "Sachin Singh", role: "Product Manager & GenAI Specialist", description: "Bridges client goals with GenAI.", image: "/images/team/ava-patel.png", Github: "https://github.com/sachinsingh" },
+    { name: "Rakshit Malik", role: "Lead DevOps Engineer", description: "Ensures CI/CD & uptime.", image: "/images/team/rakshit.jpg", Github: "https://github.com/rakshitmalik" },
+    { name: "Sachin Singh", role: "Product Manager & GenAI Specialist", description: "Bridges client goals with GenAI.", image: "/images/team/ava-patel.png", Github: "https://github.com/sachinsingh" },
   ];
 
   return (
@@ -131,7 +132,7 @@ const TeamCarousel = () => {
   );
 };
 
-// Values Component
+// Values Component - RESIZED
 const Values = () => {
   const values = [
     { icon: "🎯", title: "Innovation First", description: "We stay at the forefront of AI technology." },
@@ -143,12 +144,12 @@ const Values = () => {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
       {values.map((v, i) => (
-        <div key={i} className="bg-orbit-card border border-orbit-purple/20 rounded-2xl p-6 hover:border-orbit-purple/40 transition-all duration-300 group">
-          <div className="text-3xl mb-4">{v.icon}</div>
-          <h3 className="text-orbit-text-primary font-semibold text-lg mb-2 group-hover:text-orbit-purple transition-colors duration-300">{v.title}</h3>
-          <p className="text-orbit-text-muted text-sm leading-relaxed">{v.description}</p>
+        <div key={i} className="bg-orbit-card border border-orbit-purple/20 rounded-xl p-4 hover:border-orbit-purple/40 transition-all duration-300 group">
+          <div className="text-2xl mb-3">{v.icon}</div>
+          <h3 className="text-orbit-text-primary font-semibold text-base mb-2 group-hover:text-orbit-purple transition-colors duration-300">{v.title}</h3>
+          <p className="text-orbit-text-muted text-xs leading-relaxed">{v.description}</p>
         </div>
       ))}
     </div>
@@ -188,19 +189,19 @@ const AboutPage = () => {
               <p>From a small team of AI enthusiasts, we have grown into a full-service automation company serving clients across industries.</p>
               <p>Our mission: democratize AI and make intelligent automation accessible to businesses of all sizes.</p>
             </div>
-            <Link to="/#services"><Button variant="orbit" className="mt-6">Learn More About Our Services</Button></Link>
+            <Link to="/services"><Button variant="orbit" className="mt-8">Learn More About Our Services</Button></Link>
           </div>
           <div className="relative">
-            <div className="aspect-square bg-gradient-to-br from-orbit-purple/20 to-orbit-purple/5 rounded-2xl flex items-center justify-center">
+            <div className="aspect-square bg- from-orbit-purple/20 to-orbit-purple/5 rounded-2xl flex items-center justify-center">
               <img src="src/assets/officelogo.jpeg" alt="Office Logo" className="w-2/3 h-2/3 object-contain rounded-xl" />
             </div>
             <div className="absolute inset-0 bg-gradient-to-br from-orbit-purple/10 to-transparent rounded-2xl animate-pulse" />
           </div>
         </div>
 
-        {/* Values */}
+        {/* Values - RESIZED */}
         <div className="mb-20">
-          <div className="text-center mb-12">
+          <div className="text-center mb-10">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Values</h2>
             <p className="text-orbit-text-muted max-w-2xl mx-auto">These core principles guide every decision we make.</p>
           </div>
@@ -214,14 +215,14 @@ const AboutPage = () => {
           <TeamCarousel />
         </div>
 
-        {/* CTA */}
-        <div className="text-center bg-gradient-to-r from-orbit-purple/10 to-orbit-purple/5 rounded-2xl p-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Get Started?</h2>
-          <p className="text-orbit-text-muted text-lg mb-8 max-w-2xl mx-auto">
+        {/* CTA - RESIZED */}
+        <div className="text-center bg-gradient-to-r from-orbit-purple/10 to-orbit-purple/5 rounded-xl p-8 max-w-4xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold mb-3">Ready to Get Started?</h2>
+          <p className="text-orbit-text-muted text-base mb-6 max-w-xl mx-auto">
             Join hundreds of businesses that have already transformed operations with our AI automation solutions.
           </p>
           <Link to="/contact">
-            <Button variant="orbit" className="px-8 py-3">Book a Free Consultation</Button>
+            <Button variant="orbit" className="px-6 py-2">Book a Free Consultation</Button>
           </Link>
         </div>
       </div>

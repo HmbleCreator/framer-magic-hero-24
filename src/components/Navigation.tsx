@@ -54,6 +54,9 @@ const Navigation = () => {
           <Link to="/about" className={getLinkClass("/about")}>
             About
           </Link>
+          <Link to="/services" className={getLinkClass("/services")}>
+            Services
+          </Link>
           <Link to="/blog" className={getLinkClass("/blog")}>
             Blog
           </Link>

@@ -185,7 +185,7 @@ const ContactInfo: React.FC = () => {
         </div>
         <div>
           <div className="text-white font-semibold text-lg flex items-center gap-2">Phone</div>
-          <div className="text-zinc-300 text-base mt-1">+1(969) 819-8061</div>
+          <div className="text-zinc-300 text-base mt-1">+91 91996 81619</div>
         </div>
       </div>
     </div>

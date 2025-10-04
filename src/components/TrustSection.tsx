@@ -52,28 +52,6 @@ const TrustSection = () => {
             ))}
           </div>
         </div>
-
-        {/* Services badge */}
-        <div className="mb-6 sm:mb-8 px-4">
-          <Badge 
-            variant="outline" 
-            className="bg-orbit-dark-lighter/50 border-orbit-text-muted/20 text-orbit-text-primary px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-medium backdrop-blur-sm"
-          >
-            Our Services
-          </Badge>
-        </div>
-
-        {/* Main headline */}
-        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold text-orbit-text-primary mb-6 sm:mb-8 leading-tight max-w-5xl mx-auto px-4">
-          AI Solutions That Take Your{" "}
-          <br className="hidden md:block" />
-          Business to the Next Level
-        </h2>
-
-        {/* Subtitle */}
-        <p className="text-base sm:text-lg md:text-xl text-orbit-text-muted max-w-3xl mx-auto leading-relaxed px-4">
-          We design, develop, and implement automation tools that help you work smarter, not harder
-        </p>
       </div>
     </section>
   );
