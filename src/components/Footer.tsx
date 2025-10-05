@@ -121,40 +121,40 @@ const Footer = () => {
           {/* Right Section - Links Grid */}
           <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8 sm:gap-10 lg:gap-12">
             
-            {/* Links Column */}
+{/* Links Column */}
             <div className="space-y-4">
               <h4 className="text-orbit-text-primary font-semibold text-sm uppercase tracking-wide">Links</h4>
               <nav className="flex flex-col space-y-2.5">
                 <Link
-                  to="/#services"
+                  to="/services"
                   className="text-orbit-text-muted hover:text-orbit-purple transition-colors text-sm"
                 >
                   Services
                 </Link>
-                <Link
-                  to="/#process"
+                <a
+                  href="/#process"
                   className="text-orbit-text-muted hover:text-orbit-purple transition-colors text-sm"
                 >
                   Process
-                </Link>
-                <Link
-                  to="/#case-studies"
+                </a>
+                <a
+                  href="/#case-studies"
                   className="text-orbit-text-muted hover:text-orbit-purple transition-colors text-sm"
                 >
                   Case studies
-                </Link>
-                <Link
-                  to="/#benefits"
+                </a>
+                <a
+                  href="/#benefits"
                   className="text-orbit-text-muted hover:text-orbit-purple transition-colors text-sm"
                 >
                   Benefits
-                </Link>
-                <Link
-                  to="/#pricing"
+                </a>
+                <a
+                  href="/#pricing"
                   className="text-orbit-text-muted hover:text-orbit-purple transition-colors text-sm"
                 >
                   Pricing
-                </Link>
+                </a>
               </nav>
             </div>
 
