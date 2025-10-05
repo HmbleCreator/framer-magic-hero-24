@@ -108,7 +108,7 @@ const TeamMember = ({ name, role, description, image, Github }) => (
 const TeamCarousel = () => {
   const members = [
     { name: "Amit Kumar", role: "AI/ML Specialist", description: "Designs scalable ML models.", image: "https://avatars.githubusercontent.com/u/140157584?v=4", Github: "https://github.com/HmbleCreator" },
-    { name: "Manish Kumar", role: "Lead Web Developer", description: "Builds robust web platforms.", image: "https://avatars.githubusercontent.com/u/198463638?v=4", Github: "https://github.com/manishtarjan2" },
+    { name: "Manish Kumar", role: "Lead Web Developer", description: "Builds robust web platforms.", image:"src/assets/Manish.png", Github: "https://github.com/manishtarjan2" },
     { name: "Rakshit Malik", role: "Lead DevOps Engineer", description: "Ensures CI/CD & uptime.", image: "https://avatars.githubusercontent.com/u/111422125?v=4", Github: "https://github.com/rakshitmalik136" },
     { name: "Sachin Singh", role: "Product Manager & GenAI Specialist", description: "Bridges client goals with GenAI.", image: "/images/team/ava-patel.png", Github: "https://github.com/sachinsingh" },
   ];
