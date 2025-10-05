@@ -108,9 +108,9 @@ const TeamMember = ({ name, role, description, image, Github }) => (
 const TeamCarousel = () => {
   const members = [
     { name: "Amit Kumar", role: "AI/ML Specialist", description: "Designs scalable ML models.", image: "https://avatars.githubusercontent.com/u/140157584?v=4", Github: "https://github.com/HmbleCreator" },
-    { name: "Manish Kumar", role: "Lead Web Developer", description: "Builds robust web platforms.", image:"src/assets/Manish.png", Github: "https://github.com/manishtarjan2" },
-    { name: "Rakshit Malik", role: "Lead DevOps Engineer", description: "Ensures CI/CD & uptime.", image: "https://avatars.githubusercontent.com/u/111422125?v=4", Github: "https://github.com/rakshitmalik136" },
-    { name: "Sachin Singh", role: "Product Manager & GenAI Specialist", description: "Bridges client goals with GenAI.", image: "/images/team/ava-patel.png", Github: "https://github.com/sachinsingh" },
+    { name: "Manish Kumar", role: "Lead Web Developer", description: "Builds robust web platforms.", image:"https://avatars.githubusercontent.com/u/198463638?s=400&u=c7609b7f3e3e9fb894123aab9758d397e515b876&v=4", Github: "https://github.com/manishtarjan2" },
+    { name: "Rakshit Malik", role: "Lead DevOps Engineer", description: "Ensures CI/CD & uptime.", image: "https://avatars.githubusercontent.com/u/111422125?s=400&u=e1ab7f0d5ffaf3e15462cfb026c2642e5c4faa9e&v=4", Github: "https://github.com/rakshitmalik136" },
+    { name: "Sachin Singh", role: "Product Manager & GenAI Specialist", description: "Bridges client goals with GenAI.", image: "https://avatars.githubusercontent.com/u/146459827?v=4", Github: "https://github.com/ssadhikari02" },
   ];
 
   return (
@@ -212,7 +212,7 @@ const AboutPage = () => {
           </div>
           <div className="relative">
             <div className="aspect-square bg- from-orbit-purple/20 to-orbit-purple/5 rounded-2xl flex items-center justify-center">
-              <img src="src/assets/officelogo.jpeg" alt="Office Logo" className="w-2/3 h-2/3 object-contain rounded-xl" />
+              <img src="src\assets\officelogo.png" alt="Office Logo" className="w-2/3 h-2/3 object-contain rounded-xl" />
             </div>
             <div className="absolute inset-0 bg-gradient-to-br from-orbit-purple/10 to-transparent rounded-2xl animate-pulse" />
           </div>

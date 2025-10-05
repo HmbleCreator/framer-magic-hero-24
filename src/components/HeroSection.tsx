@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
@@ -104,6 +104,67 @@ const HeroSection = () => {
     };
   }, []);
 
+  // Headline phrases and scramble animation state
+  const phrases = [
+    "Website Solutions",
+    "AI/ML Solutions",
+    "Design Solutions",
+    "Cloud Solutions",
+    "Automation Solutions",
+  ];
+
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [displayed, setDisplayed] = useState(phrases[0]);
+
+  // Run scramble animation when phraseIndex changes
+  useEffect(() => {
+    let rafId: number | null = null;
+    const scrambleChars = "<>/[]{}()=+-_?!=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+  const scrambleTo = (target: string, duration = 2600) => {
+      const start = performance.now();
+      const from = displayed;
+      const maxLen = Math.max(from.length, target.length);
+
+      const frame = (now: number) => {
+        const t = Math.min(1, (now - start) / duration);
+        const ease = 1 - Math.pow(1 - t, 5);
+
+        let result = "";
+        for (let i = 0; i < maxLen; i++) {
+          const targetChar = target[i] ?? "";
+          if (Math.random() < ease) {
+            result += targetChar;
+          } else {
+            result += scrambleChars.charAt(Math.floor(Math.random() * scrambleChars.length));
+          }
+        }
+
+        result = result.slice(0, target.length);
+        setDisplayed(result);
+
+        if (t < 1) rafId = requestAnimationFrame(frame);
+      };
+
+      rafId = requestAnimationFrame(frame);
+    };
+
+    scrambleTo(phrases[phraseIndex]);
+
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phraseIndex]);
+
+  // Cycle phrases on an interval (slower)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPhraseIndex((prev) => (prev + 1) % phrases.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
       {/* Starfield - now behind the void */}
@@ -146,15 +207,24 @@ const HeroSection = () => {
           </span>
         </div>
 
-        {/* Headline */}
-        <h1
-          ref={headlineReveal.ref as React.RefObject<HTMLHeadingElement>}
-          className={`text-2xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-orbit-text-primary mb-6 sm:mb-8 leading-tight ${
-            headlineReveal.isRevealed ? "slide-reveal" : "opacity-0"
-          }`}
-        >
-          Intelligent Automation for <br className="hidden lg:block" /> Modern Businesses.
-        </h1>
+{/* Headline */}
+<h1
+  className={`text-2xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-orbit-text-primary mb-6 sm:mb-8 leading-tight`}
+>
+  We Provide<br></br>{" "}
+  <span
+    className="transition-opacity duration-500 ease-in-out bg-clip-text text-transparent"
+    style={{
+      background: "linear-gradient(90deg, #34D399 0%, #7C3AED 30%, #9CA3AF 65%, #3B82F6 100%)",
+      WebkitBackgroundClip: 'text',
+      backgroundClip: 'text',
+    }}
+  >
+    {displayed}
+  </span>{" "}
+  <br className="hidden lg:block" /> for Modern Businesses
+</h1>
+
 
         {/* Subtitle */}
         <p
