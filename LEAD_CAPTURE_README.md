@@ -186,7 +186,7 @@ const result = await submitForm({
 
 For technical support or feature requests:
 - 📧 Email: `hello.orbitlabs@gmail.com`
-- 🌐 Website: [orbitlabs.dev](https://orbitlabs.dev)
+- 🌐 Website: [orbitlabs.dev](https://orbitlabs.cfd)
 - 📋 Documentation: This README file
 
 ---
