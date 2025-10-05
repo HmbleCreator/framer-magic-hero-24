@@ -4,19 +4,42 @@ import { useHeadingReveal } from '@/hooks/use-heading-reveal';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
-import matter from 'gray-matter';
+import remarkGfm from 'remark-gfm';
 import blogsMeta, { BlogMeta } from '@/lib/blogs';
 import { useFormSubmission } from '@/hooks/use-form-submission';
 
-// Try to load remark-gfm at runtime
-let runtimeRemarkGfm: any = null;
-try {
-  runtimeRemarkGfm = require('remark-gfm');
-  console.log('remark-gfm loaded successfully');
-} catch (e) {
-  console.warn('remark-gfm not available, using basic markdown parsing');
-  runtimeRemarkGfm = null;
-}
+// Browser-compatible frontmatter parser (no Buffer required)
+const parseFrontmatter = (content: string): { data: Record<string, any>; content: string } => {
+  const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/;
+  const match = content.match(frontmatterRegex);
+  
+  if (!match) {
+    return { data: {}, content };
+  }
+  
+  const [, frontmatterStr, markdownContent] = match;
+  const data: Record<string, any> = {};
+  
+  // Parse YAML-like frontmatter
+  const lines = frontmatterStr.split('\n');
+  lines.forEach(line => {
+    const colonIndex = line.indexOf(':');
+    if (colonIndex > 0) {
+      const key = line.slice(0, colonIndex).trim();
+      let value = line.slice(colonIndex + 1).trim();
+      
+      // Remove quotes if present
+      if ((value.startsWith('"') && value.endsWith('"')) || 
+          (value.startsWith("'") && value.endsWith("'"))) {
+        value = value.slice(1, -1);
+      }
+      
+      data[key] = value;
+    }
+  });
+  
+  return { data, content: markdownContent };
+};
 
 // Blog Newsletter Form Component
 const BlogNewsletterForm = () => {
@@ -49,7 +72,7 @@ const BlogNewsletterForm = () => {
         value={name}
         onChange={(e) => setName(e.target.value)}
         required
-        className="w-full px-4 py-3 bg-black border border-purple-300/20 rounded-lg text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+        className="w-full px-4 py-3 bg-black border border-purple-300/20 rounded-lg text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
       />
       <div className="flex flex-col sm:flex-row gap-4">
         <input
@@ -58,7 +81,7 @@ const BlogNewsletterForm = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="flex-1 px-4 py-3 bg-black border border-purple-300/20 rounded-lg text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+          className="flex-1 px-4 py-3 bg-black border border-purple-300/20 rounded-lg text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
         />
         <button 
           type="submit"
@@ -78,7 +101,7 @@ const BlogNewsletterForm = () => {
   );
 };
 
-// Helper functions - defined once at module level
+// Helper functions
 const stripMarkdown = (md: string): string =>
   md
     .replace(/<!--([\s\S]*?)-->/g, '')
@@ -98,13 +121,12 @@ const generateDescriptionFromContent = (md: string, maxChars = 150): string => {
   return `${truncated}…`;
 };
 
-// Fixed Intersection Observer Hook
+// Intersection Observer Hook
 const useIntersectionObserver = (options: IntersectionObserverInit = {}): [React.RefObject<HTMLDivElement>, boolean] => {
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [hasIntersected, setHasIntersected] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   
-  // Memoize options to prevent unnecessary re-renders
   const memoizedOptions = useMemo(() => ({ threshold: 0.1, ...options }), [options.threshold, options.root, options.rootMargin]);
 
   useEffect(() => {
@@ -188,7 +210,7 @@ const FeaturedBlogCard: React.FC<{
   return (
     <div
       ref={ref}
-      className={`col-span-2 bg-black backdrop-blur-sm border border-purple-300/20 rounded-xl overflow-hidden hover:shadow-2xl hover:border-purple-300/40 transition-all duration-500 cursor-pointer group w-[85%] mx-auto ${
+      className={`col-span-2 bg-black backdrop-blur-sm border border-purple-300/20 rounded-xl overflow-hidden hover:shadow-2xl hover:border-purple-300/40 transition-all duration-500 cursor-pointer group w-[95%] mx-auto ${
         hasIntersected ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}
     >
@@ -247,27 +269,23 @@ const BlogPage: React.FC = () => {
     
     if (raw) {
       try {
-        const parsed = matter(raw);
+        const parsed = parseFrontmatter(raw);
         data = parsed.data || {};
         content = parsed.content || raw;
         
-        // Minimal processing - only normalize line endings
+        // Normalize line endings
         content = content.replace(/\r\n/g, '\n');
         
-        // Remove any remaining frontmatter that wasn't caught by gray-matter
-        content = content.replace(/^---[\s\S]*?---\n?/m, '');
-        
-        // Ensure headings have proper spacing (add blank line before headings if missing)
+        // Ensure headings have proper spacing
         content = content.replace(/([^\n])\n(#{1,6}\s+)/g, '$1\n\n$2');
         
-        // Ensure proper paragraph spacing for double line breaks
+        // Ensure proper paragraph spacing
         content = content.replace(/\n\n\n+/g, '\n\n');
         
         console.log('Processed markdown sample:', content.substring(0, 200) + '...');
         
       } catch (e) {
         console.warn('Error parsing markdown frontmatter:', e);
-        // Use raw content with minimal processing
         content = raw
           .replace(/\r\n/g, '\n')
           .replace(/^---[\s\S]*?---\n?/m, '')
@@ -278,27 +296,20 @@ const BlogPage: React.FC = () => {
     return { content, data };
   }, []);
 
-  useEffect(() => {
+useEffect(() => {
     const loadPosts = async () => {
       try {
         setLoading(true);
         setError(null);
         
-        // Check if blogsMeta exists and has content
         if (!blogsMeta || blogsMeta.length === 0) {
           setError('No blog metadata found');
           return;
         }
 
-        // Load markdown files from blogs folder
-        // CHANGE THIS PATH based on where your blogs folder is located:
-        // '../blogs/*.md' - if blogs is in project root (same level as src)
-        // './blogs/*.md' - if blogs is inside src folder  
-        // '/blogs/*.md' - if blogs is in public folder
         const modules = import.meta.glob('../blogs/*.md', { as: 'raw', eager: true }) as Record<string, string>;
         
         if (Object.keys(modules).length === 0) {
-          // Try alternative path if the first one doesn't work
           try {
             const altModules = import.meta.glob('/blogs/*.md', { as: 'raw', eager: true }) as Record<string, string>;
             if (Object.keys(altModules).length > 0) {
@@ -317,9 +328,7 @@ const BlogPage: React.FC = () => {
         console.log('Found markdown files:', Object.keys(modules));
         
         const loadedPosts = blogsMeta.map((meta) => {
-          // Try to find the markdown file for this blog post
           const fileKey = Object.keys(modules).find((key) => {
-            // Extract filename from path and match with slug
             const filename = key.split('/').pop()?.replace('.md', '');
             return filename === meta.slug;
           });
@@ -332,7 +341,6 @@ const BlogPage: React.FC = () => {
           
           const { content, data } = processMarkdownContent(raw);
           
-          // Debug: Log the processed content
           console.log(`Processed content for ${meta.slug}:`, {
             rawLength: raw.length,
             contentLength: content.length,
@@ -352,13 +360,8 @@ const BlogPage: React.FC = () => {
           } as BlogPost;
         });
 
-        // Sort by date (newest first)
-        loadedPosts.sort((a: BlogPost, b: BlogPost) => {
-          if (a.date && b.date) {
-            return new Date(b.date).getTime() - new Date(a.date).getTime();
-          }
-          return 0;
-        });
+// Keep the original order from blogs.ts
+// No sorting needed - blogs array order is preserved
         
         console.log('Loaded posts:', loadedPosts.length);
         setPosts(loadedPosts);
@@ -372,6 +375,32 @@ const BlogPage: React.FC = () => {
 
     loadPosts();
   }, [processMarkdownContent]);
+
+  // Hash-based modal routing - opens modal when URL has hash matching a blog slug
+  useEffect(() => {
+    if (posts.length === 0) return;
+    
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash) {
+        const matchedPost = posts.find(p => p.slug === hash);
+        if (matchedPost) {
+          setSelectedPost(matchedPost);
+          // Smooth scroll to top when modal opens
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      } else {
+        setSelectedPost(null);
+      }
+    };
+    
+    // Run once on mount to check for initial hash
+    handleHashChange();
+    
+    // Listen for hash changes
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, [posts]);
 
   if (loading) {
     return (
@@ -450,7 +479,7 @@ const BlogPage: React.FC = () => {
         {selectedPost && (
           <div className="fixed inset-0 z-50 flex items-start justify-center p-6">
             <div className="absolute inset-0 bg-black" onClick={() => setSelectedPost(null)} />
-            <div className="relative max-w-4xl w-full bg-black border border-orbit-purple/20 rounded-2xl overflow-auto p-8 z-10 max-h-[90vh] modal-scrollbar">
+            <div className="relative max-w-4xl w-full bg-black border border-purple-500/20 rounded-2xl overflow-auto p-8 z-10 max-h-[90vh] modal-scrollbar">
               <div className="flex justify-between items-start mb-6">
                 <div>
                   <h2 className="text-2xl font-bold mb-2">{selectedPost.title}</h2>
@@ -466,65 +495,135 @@ const BlogPage: React.FC = () => {
                   </svg>
                 </button>
               </div>
-              <div className="prose prose-invert prose-lg max-w-none prose-headings:text-white prose-h1:text-3xl prose-h2:text-2xl prose-h2:font-bold prose-h2:mt-8 prose-h2:mb-4 prose-p:text-gray-300 prose-p:leading-relaxed prose-strong:text-white prose-strong:font-semibold prose-blockquote:border-purple-400 prose-blockquote:bg-slate-800/50 prose-blockquote:text-gray-200 prose-ul:text-gray-300 prose-li:text-gray-300">
-                <ReactMarkdown 
-                  remarkPlugins={runtimeRemarkGfm ? [runtimeRemarkGfm] : []} 
-                  rehypePlugins={[rehypeRaw, rehypeSanitize]}
-                  components={{
-                    // Custom component for better heading rendering
-                    h1: ({children, ...props}) => (
-                      <h1 className="text-3xl font-bold text-white mt-8 mb-6 first:mt-0" {...props}>
-                        {children}
-                      </h1>
-                    ),
-                    h2: ({children, ...props}) => (
-                      <h2 className="text-2xl font-bold text-white mt-8 mb-4 first:mt-0" {...props}>
-                        {children}
-                      </h2>
-                    ),
-                    h3: ({children, ...props}) => (
-                      <h3 className="text-xl font-semibold text-white mt-6 mb-3" {...props}>
-                        {children}
-                      </h3>
-                    ),
-                    p: ({children, ...props}) => (
-                      <p className="text-gray-300 leading-relaxed mb-4" {...props}>
-                        {children}
-                      </p>
-                    ),
-                    strong: ({children, ...props}) => (
-                      <strong className="text-white font-semibold" {...props}>
-                        {children}
-                      </strong>
-                    ),
-                    blockquote: ({children, ...props}) => (
-                      <blockquote className="border-l-4 border-purple-400 bg-slate-800/50 p-4 my-6 rounded-r-lg" {...props}>
-                        <div className="text-gray-200">
+              <div className="prose prose-invert prose-lg max-w-none prose-headings:text-white prose-h1:text-3xl prose-h2:text-2xl prose-h2:font-bold prose-h2:mt-8 prose-h2:mb-4 prose-p:text-gray-300 prose-p:leading-relaxed prose-strong:text-white prose-strong:font-semibold prose-blockquote:border-purple-400 prose-blockquote:bg-slate-800/50 prose-blockquote:text-gray-200 prose-ul:text-gray-300 prose-li:text-gray-300 prose-table:border-collapse prose-table:w-full prose-table:my-8 prose-th:bg-purple-900/30 prose-th:text-white prose-th:font-semibold prose-th:p-3 prose-th:text-left prose-th:border prose-th:border-purple-500/30 prose-td:text-gray-300 prose-td:p-3 prose-td:border prose-td:border-purple-500/20 prose-tr:border-b prose-tr:border-purple-500/20">
+                {selectedPost.content ? (
+                  <ReactMarkdown 
+                    remarkPlugins={[remarkGfm] as any} 
+                    rehypePlugins={[rehypeRaw, rehypeSanitize] as any}
+                    components={{
+                      h1: ({children, ...props}) => (
+                        <h1 className="text-3xl font-bold text-white mt-8 mb-6 first:mt-0" {...props}>
                           {children}
+                        </h1>
+                      ),
+                      h2: ({children, ...props}) => (
+                        <h2 className="text-2xl font-bold text-white mt-8 mb-4 first:mt-0" {...props}>
+                          {children}
+                        </h2>
+                      ),
+                      h3: ({children, ...props}) => (
+                        <h3 className="text-xl font-semibold text-white mt-6 mb-3" {...props}>
+                          {children}
+                        </h3>
+                      ),
+                      p: ({children, ...props}) => (
+                        <p className="text-gray-300 leading-relaxed mb-4" {...props}>
+                          {children}
+                        </p>
+                      ),
+                      strong: ({children, ...props}) => (
+                        <strong className="text-white font-semibold" {...props}>
+                          {children}
+                        </strong>
+                      ),
+                      blockquote: ({children, ...props}) => (
+                        <blockquote className="border-l-4 border-purple-400 bg-slate-800/50 p-4 my-6 rounded-r-lg" {...props}>
+                          <div className="text-gray-200">
+                            {children}
+                          </div>
+                        </blockquote>
+                      ),
+                      ul: ({children, ...props}) => (
+                        <ul className="text-gray-300 space-y-2 mb-4 list-disc pl-6" {...props}>
+                          {children}
+                        </ul>
+                      ),
+                      ol: ({children, ...props}) => (
+                        <ol className="text-gray-300 space-y-2 mb-4 list-decimal pl-6" {...props}>
+                          {children}
+                        </ol>
+                      ),
+                      li: ({children, ...props}: any) => {
+                        const { ordered, ...cleanProps } = props;
+                        return (
+                          <li className="text-gray-300" {...cleanProps}>
+                            {children}
+                          </li>
+                        );
+                      },
+                      hr: ({...props}) => (
+                        <hr className="border-gray-600 my-8" {...props} />
+                      ),
+                      table: ({children, ...props}) => (
+                        <div className="overflow-x-auto my-8">
+                          <table className="min-w-full border-collapse border border-purple-500/30 rounded-lg overflow-hidden" {...props}>
+                            {children}
+                          </table>
                         </div>
-                      </blockquote>
-                    ),
-                    ul: ({children, ...props}) => (
-                      <ul className="text-gray-300 space-y-2 mb-4" {...props}>
-                        {children}
-                      </ul>
-                    ),
-                    li: ({children, ...props}) => (
-                      <li className="text-gray-300" {...props}>
-                        {children}
-                      </li>
-                    ),
-                    hr: ({...props}) => (
-                      <hr className="border-gray-600 my-8" {...props} />
-                    ),
-                    // Handle HTML elements that might come from rehype-raw
-                    div: ({children, ...props}) => (
-                      <div {...props}>{children}</div>
-                    )
-                  }}
-                >
-                  {selectedPost.content}
-                </ReactMarkdown>
+                      ),
+                      thead: ({children, ...props}) => (
+                        <thead className="bg-purple-900/30" {...props}>
+                          {children}
+                        </thead>
+                      ),
+                      tbody: ({children, ...props}) => (
+                        <tbody {...props}>
+                          {children}
+                        </tbody>
+                      ),
+                      th: ({children, ...props}) => (
+                        <th className="text-white font-semibold p-3 text-left border border-purple-500/30" {...props}>
+                          {children}
+                        </th>
+                      ),
+                      td: ({children, ...props}) => (
+                        <td className="text-gray-300 p-3 border border-purple-500/20" {...props}>
+                          {children}
+                        </td>
+                      ),
+                      tr: ({children, ...props}) => (
+                        <tr className="border-b border-purple-500/20 hover:bg-purple-900/10 transition-colors" {...props}>
+                          {children}
+                        </tr>
+                      ),
+                      a: ({children, href, ...props}) => (
+                        <a 
+                          href={href} 
+                          className="text-purple-400 hover:text-purple-300 underline" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          {...props}
+                        >
+                          {children}
+                        </a>
+                      ),
+                      code: ({children, className, ...props}: any) => {
+                        const isInline = !className;
+                        return isInline ? (
+                          <code className="bg-gray-800 text-purple-300 px-1.5 py-0.5 rounded text-sm" {...props}>
+                            {children}
+                          </code>
+                        ) : (
+                          <code className={className} {...props}>
+                            {children}
+                          </code>
+                        );
+                      },
+                      pre: ({children, ...props}) => (
+                        <pre className="bg-gray-900 p-4 rounded-lg overflow-x-auto my-4" {...props}>
+                          {children}
+                        </pre>
+                      ),
+                      div: ({children, ...props}) => (
+                        <div {...props}>{children}</div>
+                      )
+                    }}
+                  >
+                    {selectedPost.content}
+                  </ReactMarkdown>
+                ) : (
+                  <p className="text-gray-400">No content available for this post.</p>
+                )}
               </div>
             </div>
           </div>
@@ -533,6 +632,7 @@ const BlogPage: React.FC = () => {
         {/* Newsletter */}
         <div className="mt-20 text-center">
           <div className="bg-black backdrop-blur-sm border border-purple-300/20 rounded-2xl p-12 max-w-2xl mx-auto">
+            <h1 className="text-3xl md:text-4xl font-bold mb-4">Join Our AI Newsletter</h1>
             <h3 ref={newsletterHeading.ref as React.RefObject<HTMLHeadingElement>} className={`text-2xl font-bold mb-4 ${newsletterHeading.animationClasses}`}>Stay Updated</h3>
             <p className="text-gray-300 mb-8">
               Get the latest AI insights delivered straight to your inbox. No spam, just valuable content.
