@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import Footer from "./Footer";
+import officeLogo from '@/assets/officelogo.png';
 import { useHeadingReveal } from "@/hooks/use-heading-reveal";
 
 // 🔹 Animated Background
@@ -16,7 +17,7 @@ const AnimatedBackground: React.FC = () => (
   </div>
 );
 
-// 🔹 Statistics (Fixed & Fully Responsive)
+// 🔹 Statistics
 const Statistics: React.FC = () => {
   const [counts, setCounts] = React.useState({
     clients: 0,
@@ -56,32 +57,25 @@ const Statistics: React.FC = () => {
   ];
 
   return (
-    <div className="w-full px-2 sm:px-4 md:px-6">
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 text-center place-items-center">
-        {stats.map((stat, i) => (
-          <motion.div
-            key={i}
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 200 }}
-            className="w-full sm:w-[90%] bg-gradient-to-br from-gray-900/40 to-gray-800/40 backdrop-blur-md 
-                       border border-orbit-purple/30 rounded-xl p-4 sm:p-5 md:p-6 
-                       hover:shadow-[0_0_20px_-5px_rgba(147,51,234,0.4)] transition-all duration-300"
-          >
-            <div className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-orbit-purple mb-2">
-              {stat.number}
-            </div>
-            <div className="text-orbit-text-primary text-sm sm:text-base font-semibold mb-1">
-              {stat.label}
-            </div>
-            <div className="text-orbit-text-muted text-xs sm:text-sm">{stat.description}</div>
-          </motion.div>
-        ))}
-      </div>
+    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 text-center">
+      {stats.map((stat, i) => (
+        <motion.div
+          key={i}
+          whileHover={{ scale: 1.08 }}
+          transition={{ type: "spring", stiffness: 150 }}
+          className="bg-gradient-to-br from-gray-900/40 to-gray-800/40 backdrop-blur-md border border-orbit-purple/30 
+                     rounded-xl p-6 hover:shadow-[0_0_25px_-5px_rgba(147,51,234,0.4)] transition-all duration-300"
+        >
+          <div className="text-3xl lg:text-4xl font-extrabold text-orbit-purple mb-2 drop-shadow-sm">{stat.number}</div>
+          <div className="text-orbit-text-primary font-semibold mb-1">{stat.label}</div>
+          <div className="text-orbit-text-muted text-sm">{stat.description}</div>
+        </motion.div>
+      ))}
     </div>
   );
 };
 
-// 🔹 Team Carousel (Fully Responsive)
+// 🔹 Team Carousel
 const TeamCarousel: React.FC = () => {
   const members = [
     {
@@ -95,14 +89,16 @@ const TeamCarousel: React.FC = () => {
       name: "Manish Kumar",
       role: "Lead Web Developer",
       description: "Builds robust web platforms.",
-      image: "https://avatars.githubusercontent.com/u/198463638?s=400&v=4",
+      image:
+        "https://avatars.githubusercontent.com/u/198463638?s=400&u=c7609b7f3e3e9fb894123aab9758d397e515b876&v=4",
       Github: "https://github.com/manishtarjan2",
     },
     {
       name: "Rakshit Malik",
       role: "Lead DevOps Engineer",
       description: "Ensures CI/CD & uptime.",
-      image: "https://avatars.githubusercontent.com/u/111422125?s=400&v=4",
+      image:
+        "https://avatars.githubusercontent.com/u/111422125?s=400&u=e1ab7f0d5ffaf3e15462cfb026c2642e5c4faa9e&v=4",
       Github: "https://github.com/rakshitmalik136",
     },
     {
@@ -122,7 +118,7 @@ const TeamCarousel: React.FC = () => {
           100% { transform: translateX(-50%); }
         }
         .animate-smooth-scroll {
-          animation: smoothScroll 45s linear infinite;
+          animation: smoothScroll 40s linear infinite;
         }
         .animate-smooth-scroll:hover {
           animation-play-state: paused;
@@ -133,13 +129,11 @@ const TeamCarousel: React.FC = () => {
         {[...members, ...members].map((member, index) => (
           <motion.div
             key={index}
-            whileHover={{ scale: 1.05, y: -6 }}
+            whileHover={{ scale: 1.05, y: -8 }}
             transition={{ duration: 0.3 }}
-            className="flex-shrink-0 backdrop-blur-lg bg-gradient-to-br from-gray-800/50 to-gray-900/60 
-                       text-white rounded-2xl shadow-lg border border-orbit-purple/30 
-                       hover:shadow-[0_0_25px_-8px_rgba(147,51,234,0.5)]
-                       transition-all duration-300 text-center
-                       w-[70vw] sm:w-[45vw] md:w-[22vw] max-w-[280px] p-5"
+            className="flex-shrink-0 backdrop-blur-lg bg-gradient-to-br from-gray-800/50 to-gray-900/60 text-white 
+                       rounded-2xl shadow-lg border border-orbit-purple/30 hover:shadow-[0_0_25px_-8px_rgba(147,51,234,0.5)]
+                       transition-all duration-300 text-center w-[70vw] sm:w-[45vw] md:w-[22vw] max-w-[280px] p-5"
           >
             <img
               src={member.image}
@@ -183,13 +177,13 @@ const TeamCarousel: React.FC = () => {
         ))}
       </div>
 
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-gray-950 to-transparent" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-gray-950 to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-gray-950 to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-gray-950 to-transparent" />
     </div>
   );
 };
 
-// 🔹 Values Section
+// 🔹 Values
 const Values: React.FC = () => {
   const values = [
     { icon: "🎯", title: "Innovation First", description: "We stay at the forefront of AI technology." },
@@ -206,7 +200,8 @@ const Values: React.FC = () => {
         <motion.div
           key={i}
           whileHover={{ scale: 1.05 }}
-          className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 border border-orbit-purple/30 rounded-xl p-5 hover:shadow-[0_0_20px_-5px_rgba(147,51,234,0.5)] transition-all duration-300"
+          className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 border border-orbit-purple/30 rounded-xl p-5 
+                     hover:shadow-[0_0_20px_-5px_rgba(147,51,234,0.5)] transition-all duration-300"
         >
           <div className="text-3xl mb-3">{v.icon}</div>
           <h3 className="text-orbit-purple font-semibold text-lg mb-2">{v.title}</h3>
@@ -217,7 +212,7 @@ const Values: React.FC = () => {
   );
 };
 
-// 🔹 About Page (Final)
+// 🔹 Full About Page
 const AboutPage: React.FC = () => {
   const heroHeading = useHeadingReveal({ direction: "slide-right", delay: 300 });
   const heroSubheading = useHeadingReveal({ direction: "slide-right", delay: 600 });
@@ -226,8 +221,9 @@ const AboutPage: React.FC = () => {
     <div className="min-h-screen bg-orbit-dark text-orbit-text-primary relative">
       <AnimatedBackground />
       <div className="relative z-10 container mx-auto px-4 sm:px-6 md:px-10 py-12 sm:py-16">
-        {/* Hero */}
-        <div className="text-center mb-16">
+
+        {/* Hero Section */}
+        <div className="text-center mb-20">
           <motion.h1
             ref={heroHeading.ref as React.RefObject<HTMLHeadingElement>}
             initial={{ opacity: 0, y: 30 }}
@@ -248,19 +244,27 @@ const AboutPage: React.FC = () => {
           </motion.p>
         </div>
 
-        {/* Stats */}
-        <div className="bg-orbit-card border border-orbit-purple/30 rounded-2xl p-6 sm:p-10 mb-16 shadow-[0_0_25px_-5px_rgba(147,51,234,0.3)]">
+        {/* Statistics */}
+        <div className="bg-orbit-card border border-orbit-purple/30 rounded-2xl p-10 sm:p-12 mb-20 shadow-[0_0_25px_-5px_rgba(147,51,234,0.3)]">
           <Statistics />
         </div>
 
-        {/* Story */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20 px-4 sm:px-6">
+        {/* Our Story */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20 px-6">
           <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
             <h2 className="text-3xl md:text-4xl font-bold mb-6 text-orbit-purple">Our Story</h2>
             <div className="space-y-4 text-orbit-text-muted leading-relaxed">
-              <p>Founded in 2019, OrbIT Labs started with a mission to automate repetitive tasks using AI.</p>
-              <p>We grew from a small team of AI enthusiasts into a full-service automation company serving clients globally.</p>
-              <p>Our goal: make intelligent automation accessible to businesses of all sizes.</p>
+              <p>
+                Founded in 2019, OrbIT Labs emerged from a simple observation: businesses were spending countless
+                hours on repetitive tasks that could be automated.
+              </p>
+              <p>
+                From a small team of AI enthusiasts, we have grown into a full-service automation company serving
+                clients across industries.
+              </p>
+              <p>
+                Our mission: democratize AI and make intelligent automation accessible to businesses of all sizes.
+              </p>
             </div>
             <Link to="/services">
               <Button variant="orbit" className="mt-8 shadow-md hover:shadow-[0_0_15px_-3px_rgba(147,51,234,0.4)]">
@@ -269,10 +273,18 @@ const AboutPage: React.FC = () => {
             </Link>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.4 }}>
-            <div className="relative flex justify-center items-center bg-gradient-to-tr from-orbit-purple/20 to-orbit-purple/5 rounded-2xl p-8">
-              <img src="/src/assets/officelogo.png" alt="Office Logo" className="w-3/4 sm:w-2/3 h-auto object-contain rounded-xl" />
-            </div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.4 }}
+            className="relative flex justify-center items-center"
+          >
+            <img
+              src={officeLogo}
+              alt="Office Logo"
+              className="w-2/3 sm:w-3/4 md:w-2/3 h-auto object-contain rounded-xl"
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-orbit-purple/10 to-transparent rounded-2xl animate-pulse" />
           </motion.div>
         </div>
 
@@ -280,7 +292,9 @@ const AboutPage: React.FC = () => {
         <div className="mb-20">
           <div className="text-center mb-10">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Values</h2>
-            <p className="text-orbit-text-muted max-w-2xl mx-auto">These core principles guide every decision we make.</p>
+            <p className="text-orbit-text-muted max-w-2xl mx-auto">
+              These core principles guide every decision we make.
+            </p>
           </div>
           <Values />
         </div>
@@ -298,7 +312,7 @@ const AboutPage: React.FC = () => {
         <div className="text-center bg-gradient-to-r from-orbit-purple/10 to-orbit-purple/5 rounded-xl p-10 max-w-4xl mx-auto shadow-[0_0_25px_-5px_rgba(147,51,234,0.4)]">
           <h2 className="text-2xl md:text-3xl font-bold mb-3">Ready to Get Started?</h2>
           <p className="text-orbit-text-muted text-base mb-6 max-w-xl mx-auto">
-            Join hundreds of businesses already transforming operations with our AI automation solutions.
+            Join hundreds of businesses that have already transformed operations with our AI automation solutions.
           </p>
           <Link to="/contact">
             <Button variant="orbit" className="px-6 py-2 hover:shadow-[0_0_15px_-3px_rgba(147,51,234,0.4)]">
