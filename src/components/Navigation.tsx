@@ -21,33 +21,31 @@ const Navigation = () => {
 
   return (
     <>
-      <nav className="sticky top-0 z-50 flex items-center justify-between px-4 sm:px-6 py-6 max-w-8xl mx-auto h-[60px] bg-orbit-dark bg-opacity-95 backdrop-blur-md shadow-md">
-        {/* Logo */}
+      <nav
+        className="sticky top-0 z-50 flex items-center justify-between 
+                   px-4 sm:px-6 md:px-10 py-4 h-[64px] 
+                   bg-orbit-dark/95 backdrop-blur-md shadow-lg 
+                   border-b border-gray-800"
+      >
+        {/* 🔹 Logo */}
         <div
           style={{
-            width: "clamp(140px, 35vw, 190px)",
-            height: "160px",
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            minWidth: "100px",
-            overflow: "visible",
-            padding: 0,
-            alignContent: "center",
-            flexWrap: "nowrap",
-            gap: "10px",
+            width: "clamp(130px, 25vw, 180px)",
+            height: "600px",
             backgroundImage: `url(${orbitLogo})`,
             backgroundSize: "contain",
             backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-            borderRadius: 0,
+            backgroundPosition: "center left",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            marginLeft: "10px",
           }}
           aria-label="OrbIT Labs logo"
         />
 
-        {/* Desktop Navigation Links */}
-        <div className="hidden md:flex items-center space-x-8 h-full">
+        {/* 🔹 Desktop Navigation */}
+        <div className="hidden md:flex items-center space-x-8">
           <Link to="/" className={getLinkClass("/")}>
             Home
           </Link>
@@ -65,10 +63,14 @@ const Navigation = () => {
           </Link>
         </div>
 
-        {/* Desktop CTA Button */}
-        <div className="hidden md:flex items-center h-full">
+        {/* 🔹 Desktop CTA */}
+        <div className="hidden md:flex items-center">
           <BookingModal>
-            <Button variant="orbit" className="px-6 py-2 rounded-lg font-medium h-[40px] flex items-center overflow-hidden group relative" style={{height: '40px'}}>
+            <Button
+              variant="orbit"
+              className="px-6 py-2 rounded-lg font-medium h-[40px] flex items-center 
+                        overflow-hidden group relative transition-all duration-300"
+            >
               <span className="block transition-transform duration-500 group-hover:-translate-y-full group-hover:opacity-0">
                 Book a call
               </span>
@@ -79,7 +81,7 @@ const Navigation = () => {
           </BookingModal>
         </div>
 
-        {/* Mobile Menu Button */}
+        {/* 🔹 Mobile Menu Toggle */}
         <button
           className="md:hidden flex items-center justify-center w-10 h-10 text-orbit-text-primary hover:text-orbit-purple transition-colors"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -89,45 +91,55 @@ const Navigation = () => {
         </button>
       </nav>
 
-      {/* Mobile Menu */}
+      {/* 🔹 Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="fixed top-[60px] left-0 right-0 bg-orbit-dark/60 backdrop-blur-sm border-t border-gray-800 md:hidden z-40 animate-in slide-in-from-top duration-200">
-          <div className="flex flex-col px-4 py-6 space-y-4">
-            <Link 
-              to="/" 
-              className={`${getLinkClass("/")} py-3 px-4 rounded-lg hover:bg-white/5 transition-all text-lg`}
+        <div
+          className="fixed top-[64px] left-0 right-0 bg-orbit-dark/95 backdrop-blur-md 
+                     border-t border-gray-800 md:hidden z-40 animate-in slide-in-from-top duration-200"
+        >
+          <div className="flex flex-col px-6 py-6 space-y-4 text-center">
+            <Link
+              to="/"
+              className={`${getLinkClass("/")} py-3 rounded-lg hover:bg-white/5 transition-all text-lg`}
               onClick={handleLinkClick}
             >
               Home
             </Link>
-            <Link 
-              to="/about" 
-              className={`${getLinkClass("/about")} py-3 px-4 rounded-lg hover:bg-white/5 transition-all text-lg`}
+            <Link
+              to="/about"
+              className={`${getLinkClass("/about")} py-3 rounded-lg hover:bg-white/5 transition-all text-lg`}
               onClick={handleLinkClick}
             >
               About
             </Link>
-            <Link 
-              to="/blog" 
-              className={`${getLinkClass("/blog")} py-3 px-4 rounded-lg hover:bg-white/5 transition-all text-lg`}
+            <Link
+              to="/services"
+              className={`${getLinkClass("/services")} py-3 rounded-lg hover:bg-white/5 transition-all text-lg`}
+              onClick={handleLinkClick}
+            >
+              Services
+            </Link>
+            <Link
+              to="/blog"
+              className={`${getLinkClass("/blog")} py-3 rounded-lg hover:bg-white/5 transition-all text-lg`}
               onClick={handleLinkClick}
             >
               Blog
             </Link>
-            <Link 
-              to="/contact" 
-              className={`${getLinkClass("/contact")} py-3 px-4 rounded-lg hover:bg-white/5 transition-all text-lg`}
+            <Link
+              to="/contact"
+              className={`${getLinkClass("/contact")} py-3 rounded-lg hover:bg-white/5 transition-all text-lg`}
               onClick={handleLinkClick}
             >
               Contact
             </Link>
-            
-            {/* Mobile CTA Button */}
+
+            {/* 🔹 Mobile CTA */}
             <div className="pt-4 border-t border-gray-800">
               <BookingModal>
                 <Button
                   variant="orbit"
-                  className="w-full px-6 py-3 rounded-lg font-medium h-[48px] text-base"
+                  className="w-full px-6 py-3 rounded-lg font-medium text-base h-[48px]"
                 >
                   Book a call
                 </Button>
